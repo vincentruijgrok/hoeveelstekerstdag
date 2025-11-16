@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <link rel="icon" type="image/png" href="tree.png" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kerstdag Teller</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f9f9f9;
+      color: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+    }
+
+    .container {
+      padding: 20px;
+      max-width: 800px;
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 40px;
+    }
+
+    .result {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin: 30px 0;
+    }
+
+    h2 {
+      margin-top: 60px;
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 15px;
+      margin-top: 15px;
+      border-radius: 10px;
+      border: 2px solid #000;
+      font-size: 1.2rem;
+      box-sizing: border-box;
+    }
+
+    button {
+      background: #000;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #444;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Hoeveelste Kerstdag is het?</h1>
+    <div class="result" id="todayResult">Bezig met berekenen...</div>
+
+    <h2>Zoek zelf een datum</h2>
+    <input type="date" id="dateInput">
+    <button onclick="checkCustomDate()">Bereken</button>
+    <div class="result" id="customResult"><br></div>
+  </div>
+
+  <script>
+    function kerstNummer(datum) {
+      const year = datum.getFullYear();
+      const eersteKerst = new Date(year, 11, 25); // 25 dec
+
+      // Als de datum vóór kerst valt → hoort bij het vorige jaar
+      if (datum < eersteKerst) {
+        const vorigJaar = year - 1;
+        const eersteKerstVorig = new Date(vorigJaar, 11, 25);
+        return Math.floor((datum - eersteKerstVorig) / (1000*60*60*24)) + 1;
+      }
+
+      return Math.floor((datum - eersteKerst) / (1000*60*60*24)) + 1;
+    }
+
+    function updateToday() {
+      const vandaag = new Date();
+      const nummer = kerstNummer(vandaag);
+      document.getElementById("todayResult").textContent = `Vandaag is het ${nummer}e kerstdag`;
+    }
+
+    function checkCustomDate() {
+      const val = document.getElementById("dateInput").value;
+      if (!val) return;
+      const datum = new Date(val + "T00:00:00");
+      const nummer = kerstNummer(datum);
+      document.getElementById("customResult").textContent = `Dit is ${nummer}e kerstdag`;
+    }
+
+    updateToday();
+  </script>
+</body>
+</html>
